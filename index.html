@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game 3D</title>
+    <title>Snake Game 3D - Smooth Control</title>
     <style>
         body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; margin: 0; }
         #gameContainer { width: 600px; height: 600px; }
@@ -12,13 +12,14 @@
 </head>
 <body>
     <div id="controls">
-        <b>3D Snake Controls</b><br>
-        Move: Arrow keys (x/z), W/S (y)<br>
-        Mouse: Drag to rotate view, Wheel to zoom<br>
+        <b>3D Snake Controls (Smooth)</b><br>
+        Move: Mouse drag in 3D space<br>
+        Camera: OrbitControls (drag/zoom)<br>
+        <small>Tip: Click and drag on empty space to rotate camera, drag snake head to move!</small>
     </div>
     <div id="gameContainer"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="snake3d.js"></script>
+    <script src="snake3d_smooth.js"></script>
 </body>
 </html>
