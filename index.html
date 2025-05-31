@@ -7,11 +7,18 @@
     <style>
         body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; margin: 0; }
         #gameContainer { width: 600px; height: 600px; }
+        #controls { position: absolute; top: 10px; left: 10px; color: #fff; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; font-size: 15px; z-index: 10; }
     </style>
 </head>
 <body>
+    <div id="controls">
+        <b>3D Snake Controls</b><br>
+        Move: Arrow keys (x/z), W/S (y)<br>
+        Mouse: Drag to rotate view, Wheel to zoom<br>
+    </div>
     <div id="gameContainer"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="snake3d.js"></script>
 </body>
 </html>
