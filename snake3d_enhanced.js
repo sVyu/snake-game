@@ -33,6 +33,8 @@ let snakeMeshes = [];
 let velocity = new THREE.Vector3(0.1, 0, 0); // Smooth velocity
 let targetDirection = velocity.clone();
 let autoTracking = false;
+let paused = false;
+let statusMsg = '';
 
 // Food
 let food = { x: 15, y: 10, z: 10 };
@@ -77,6 +79,7 @@ function randomPosition() {
 }
 
 function update() {
+    if (paused) return;
     // Auto tracking: move toward food
     if (autoTracking) {
         const head = snake[0];
@@ -102,9 +105,12 @@ function update() {
     }
 
     // Wall: bounce instead of reset
-    if (head.x < 0 || head.x > gridSize) velocity.x *= -1;
-    if (head.y < 0 || head.y > gridSize) velocity.y *= -1;
-    if (head.z < 0 || head.z > gridSize) velocity.z *= -1;
+    let bounced = false;
+    if (head.x < 0 || head.x > gridSize) { velocity.x *= -1; bounced = true; }
+    if (head.y < 0 || head.y > gridSize) { velocity.y *= -1; bounced = true; }
+    if (head.z < 0 || head.z > gridSize) { velocity.z *= -1; bounced = true; }
+    if (bounced) statusMsg = 'Wall bounce!';
+    else statusMsg = '';
 }
 
 function distance(a, b) {
@@ -128,17 +134,19 @@ function resetGame() {
 let isDragging = false;
 let lastMouse = { x: 0, y: 0 };
 renderer.domElement.addEventListener('pointerdown', (e) => {
-    if (e.button === 0 && !autoTracking) {
+    if (e.button === 0 && !autoTracking && !paused) {
         isDragging = true;
         lastMouse.x = e.clientX;
         lastMouse.y = e.clientY;
+        document.body.style.cursor = 'grabbing';
     }
 });
 renderer.domElement.addEventListener('pointerup', () => {
     isDragging = false;
+    document.body.style.cursor = 'default';
 });
 renderer.domElement.addEventListener('pointermove', (e) => {
-    if (isDragging && !autoTracking) {
+    if (isDragging && !autoTracking && !paused) {
         const dx = e.clientX - lastMouse.x;
         const dy = e.clientY - lastMouse.y;
         lastMouse.x = e.clientX;
@@ -162,18 +170,24 @@ function smoothUpdateVelocity() {
 
 drawFood();
 
-// UI: Show coordinates
+// UI: Show coordinates and score
 const coordsDiv = document.getElementById('coords');
 const keyhintDiv = document.getElementById('keyhint');
+const scoreDiv = document.getElementById('score');
+const statusDiv = document.getElementById('status');
 function updateUI() {
     const h = snake[0];
     coordsDiv.textContent = `(x, y, z): ${h.x.toFixed(2)}, ${h.y.toFixed(2)}, ${h.z.toFixed(2)}`;
+    scoreDiv.textContent = `Score: ${score}`;
+    statusDiv.textContent = statusMsg;
 }
 
 // UI: Show key hint
 const keyList = [
     { key: 'Mouse Drag', desc: 'Move snake direction (when Auto OFF)' },
     { key: 'A', desc: 'Toggle Auto Tracking' },
+    { key: 'Space', desc: 'Pause/Resume' },
+    { key: 'R', desc: 'Reset Game' },
     { key: 'OrbitControls', desc: 'Camera: drag/zoom' }
 ];
 function showKeyHint() {
@@ -196,6 +210,12 @@ document.addEventListener('keydown', (e) => {
         autoBtn.textContent = `Auto Tracking: ${autoTracking ? 'ON' : 'OFF'}`;
         autoBtn.style.background = autoTracking ? '#0f0' : '#444';
         autoBtn.style.color = autoTracking ? '#222' : '#0f0';
+    } else if (e.key === ' ') {
+        paused = !paused;
+        statusMsg = paused ? 'Paused' : '';
+    } else if (e.key.toLowerCase() === 'r') {
+        resetGame();
+        statusMsg = 'Game Reset!';
     }
 });
 
