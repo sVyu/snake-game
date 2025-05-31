@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game 3D - Start with Auto Tracking</title>
+    <title>Snake Game 3D - Centered Game Screen</title>
     <style>
-        body { display: flex; justify-content: flex-start; align-items: center; height: 100vh; background: #181818; margin: 0; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #181818;
+            margin: 0;
+        }
+        #mainWrap {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 36px;
+        }
         #sidePanel {
             width: 230px;
             min-height: 600px;
             background: #181818;
             color: #fff;
             padding: 24px 16px 24px 16px;
-            margin-right: 12px;
             border-radius: 16px;
             box-shadow: 2px 0 16px #000a;
             display: flex;
@@ -61,19 +73,31 @@
             font-size: 14px;
             color: #fff;
         }
-        #gameContainer { width: 600px; height: 600px; position: relative; background: #111; border-radius: 18px; box-shadow: 0 0 24px #000a; }
+        #gameContainer {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            background: #111;
+            border-radius: 18px;
+            box-shadow: 0 0 24px #000a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
-    <div id="sidePanel">
-        <div id="score">Score: 0</div>
-        <div id="coords">(x, y, z): --</div>
-        <div id="status"></div>
-        <button id="autoBtn" class="on">Auto Tracking: ON</button>
-        <div id="keyhint">Key Hint: --</div>
-        <div style="margin-top:18px; font-size:13px; color:#aaa;">3D Snake Controls<br>Move: Arrow keys / Q, E (z-axis)<br>Camera: OrbitControls (drag/zoom)<br>Tip: Drag on empty space to rotate camera, drag snake head to move!</div>
+    <div id="mainWrap">
+        <div id="sidePanel">
+            <div id="score">Score: 0</div>
+            <div id="coords">(x, y, z): --</div>
+            <div id="status"></div>
+            <button id="autoBtn" class="on">Auto Tracking: ON</button>
+            <div id="keyhint">Key Hint: --</div>
+            <div style="margin-top:18px; font-size:13px; color:#aaa;">3D Snake Controls<br>Move: Arrow keys / Q, E (z-axis)<br>Camera: OrbitControls (drag/zoom)<br>Tip: Drag on empty space to rotate camera, drag snake head to move!</div>
+        </div>
+        <div id="gameContainer"></div>
     </div>
-    <div id="gameContainer"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="snake3d_issue12.js"></script>
