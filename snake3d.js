@@ -1,17 +1,27 @@
-// 3D Snake Game using Three.js
-// Basic 3D snake logic and rendering
-
+// 3D Snake Game using Three.js with OrbitControls
 const container = document.getElementById('gameContainer');
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x222222);
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(600, 600);
 container.appendChild(renderer.domElement);
 
+// OrbitControls for camera
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.set(10, 10, 10);
+controls.update();
+
 // Lighting
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 10, 10);
+light.position.set(0, 30, 30);
 scene.add(light);
+scene.add(new THREE.AmbientLight(0x888888));
+
+// Add grid helper (ground)
+const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0x444444);
+gridHelper.position.y = -0.51;
+scene.add(gridHelper);
 
 // Game grid
 const gridSize = 20;
@@ -30,7 +40,7 @@ let foodMesh = null;
 let score = 0;
 
 // Camera setup
-camera.position.set(10, 25, 25);
+camera.position.set(25, 25, 25);
 camera.lookAt(10, 10, 10);
 
 function createCube(x, y, z, color) {
@@ -43,10 +53,8 @@ function createCube(x, y, z, color) {
 }
 
 function drawSnake() {
-    // Remove old meshes
     snakeMeshes.forEach(mesh => scene.remove(mesh));
     snakeMeshes = [];
-    // Draw new snake
     snake.forEach((segment, i) => {
         const mesh = createCube(segment.x, segment.y, segment.z, i === 0 ? 0x00ff00 : 0x008800);
         snakeMeshes.push(mesh);
@@ -67,7 +75,6 @@ function randomPosition() {
 }
 
 function update() {
-    // Move snake
     const head = { ...snake[0] };
     head.x += direction.x;
     head.y += direction.y;
@@ -121,10 +128,10 @@ drawFood();
 
 function animate() {
     requestAnimationFrame(animate);
+    controls.update();
     renderer.render(scene, camera);
 }
 
-let tick = 0;
 function gameLoop() {
     setTimeout(gameLoop, 120);
     update();
