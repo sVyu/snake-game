@@ -20,7 +20,7 @@ function resetFood() {
 
 function gameLoop() {
     requestAnimationFrame(gameLoop);
-    if (++count < 4) return;
+    if (++count < 6) return;
     count = 0;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
